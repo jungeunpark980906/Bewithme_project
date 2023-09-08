@@ -1,0 +1,21 @@
+package com.bewithme.www.service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.bewithme.www.domain.ChatBotVO;
+import com.bewithme.www.repository.ChatBotDAO;
+
+@Service
+public class ChatBotServiceImpl implements ChatBotService {
+
+	@Inject
+	private ChatBotDAO chatBotDAO;
+
+	@Override
+	public int registerChatBot(ChatBotVO cbvo) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+}

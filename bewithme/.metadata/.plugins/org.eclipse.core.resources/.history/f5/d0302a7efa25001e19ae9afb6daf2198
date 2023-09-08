@@ -1,0 +1,9 @@
+package com.bewithme.www.repository;
+
+import com.bewithme.www.domain.ChatBotVO;
+
+public interface ChatBotDAO {
+
+	int insertChatBot(ChatBotVO cbvo);
+
+}

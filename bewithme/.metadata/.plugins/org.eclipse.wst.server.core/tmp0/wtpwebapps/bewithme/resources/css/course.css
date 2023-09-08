@@ -1,0 +1,342 @@
+@font-face {
+    font-family:AppleSDGothicNeoB;
+    src: url(/resources/font/AppleSDGothicNeoB.ttf);
+}
+@font-face {
+    font-family: AppleSDGothicNeoR;
+    src: url(/resources/font/AppleSDGothicNeoR.ttf);
+}
+body{
+    color: white;
+    font-family: AppleSDGothicNeoR;
+}
+/* 스크롤 */
+.right {
+    overflow: scroll;
+    /* Add other CSS properties as needed */
+
+    /* Hide the scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+
+    overflow-x:hidden;
+}
+.right::-webkit-scrollbar {
+    /*  Chrome , Safari , Opera에 사용하는 스크롤 숨기기 */
+   display:none; 
+}
+
+/* Style the thumb of the scrollbar */
+.right::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+/* Style the track of the scrollbar */
+.right::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.co_bookmark{
+    margin-top: 5%;
+	display: flex;
+	justify-content : space-between;
+    margin-left: 10%; 
+    width: 80%;
+}
+/* 강의명&북마크 */
+h1{
+    display: inline-block;
+}
+
+.bookmarkBtn{
+	margin-left: 50%;
+	border: 0;
+    background-color: transparent;
+}
+
+/* 조회수&날짜 */
+.co_t{
+    display: flex;
+    justify-content : space-between;
+    margin-left: 10%;
+    margin-top: 2%;
+    color: #838689;
+    width: 80%;
+}
+.co_t span:nth-child(2){
+    display: inline-block;
+    margin-left: 67%;
+}
+/* 박스설명 */
+.ex{
+    margin-left: 10%;
+    margin-top: 5%;
+    width: 80%;
+    background-color: #ffac4d3c;
+    padding: 15px; /* 예시로 20px의 안쪽 여백을 추가하였습니다 */
+}
+/* 제목 */
+
+/* 부제목 */
+h3{
+    margin-top: 3%;
+    margin-left: 10%;
+    margin-bottom: 1.5%;
+}
+/* 설명문 */
+.cou_content{
+   	margin-top: 3%;
+    margin-left: 10%;
+    margin-bottom: 3%;
+    width: 80%;
+}
+/* 강조문 */
+blockquote{
+/*     margin-left: 10%;
+    width: 80%; */
+    border-left: 4px solid #ccc;
+    margin-bottom: 2%;
+    margin-top: 2%;
+    padding-left: 16px;
+    font-weight: 300;
+    color: #838689;
+    font-size: 18px;
+}
+
+img{
+    margin-left: 15%;
+    width: 70%;
+    height: 90%;
+}
+
+p a{
+    color: #FFAC4D;
+}
+
+/* 댓글 부분 */
+hr{
+    margin-left: 10%;
+    width: 80%;
+
+    background:#808080;
+    height:1px;
+    border:0;
+}
+.com{
+    margin-left: 10%;
+    margin-top: 5%;
+    margin-bottom: 2%;
+    display: flex;
+}
+svg{
+    display: inline-block;
+}
+.com h4{
+    margin-left: 1%;
+}
+/* 댓글 입력창 */
+.commentt{
+    margin-left: 10%;
+    display: flex;
+    align-items: center; /* 요소들을 수직 가운데로 정렬 */
+    margin-top: 2%;
+}
+.comimg {
+    width: 40px; /* 동그라미의 지름 값으로 설정 */
+    height: 40px; /* 동그라미의 지름 값으로 설정 */
+    border-radius: 50%; /* 50%로 설정하여 동그라미 모양으로 만듦 */
+    background-color: #FFAC4D; /* 원하는 배경색으로 설정 */
+    color: #fff; /* 원하는 글자색으로 설정 */
+    text-align: center; /* 텍스트를 가운데 정렬 */
+    line-height: 40px; /* 텍스트를 수직 가운데로 정렬 */
+    font-weight: bold; /* 글자를 굵게 표시 */
+    font-size: 20px; /* 글자 크기 설정 */
+}
+
+.comlist{
+    margin-left: 2%;
+    display: inline-block;
+    background-color: #e1e1e1;
+    width: 80%;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+}
+.combtn{
+    border: none;
+}
+
+
+/* 정으니 댓글 */
+/* 댓글 */
+.comment{
+    width: 100%;
+    height: fit-content;
+    margin: 30px 0;
+}
+
+/* _댓글 카운트 */
+.comment_count{
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-left: 10%;
+}
+
+.comment_count>span{
+    color : #FFAC4D;
+}
+
+/* _댓글 작성창 */
+
+.comment_write{
+    width: 80%;
+    height: 180px;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin-left: 10%;
+}
+
+.comment_write>textarea{
+    width: 99%;
+    height: 55%;
+    border: none;
+    resize: none;
+    background-color: inherit;
+    border-radius: 10px;
+    
+
+    color: white;
+    font-size: 15px;
+    padding: 10px;
+    font-family: "AppleSDGothicNeoR";
+}
+
+.comment_write>textarea:focus{
+    outline: none;
+}
+
+.comment_write>.cw_line{
+    border-bottom: 1px solid white;
+}
+
+.comment_write>div{
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    
+}
+
+.comment_write span{
+    padding-top: 20px;
+    padding-left: 10px;
+}
+
+.comment_write button{
+    width: 95px;
+    height: 30px;
+    color: white;
+    font-size: 13px;
+
+    border: none;
+    border-radius: 10px;
+    background-color: #6C72CD;
+
+    margin-top: 13px;
+    margin-right: 10px;
+}
+
+.comment_write button:hover{
+    cursor: pointer;
+    background-color: #444881;
+}
+
+/* 댓글 리스트 부분 */
+.comment_list{
+    /* 댓글 전체 */
+    margin-top: 40px;
+    width: 100%;
+    height: 500px;
+    margin-left: 10%;
+}
+
+.nickname{
+	color: #FFAC4D;
+}
+
+.comment_content{
+    /* 댓글 하나하나 */
+    width: 80%;
+    height: fit-content;
+}
+
+/* 댓글 수정할 수 있는 입력 칸 */
+#cou_comment {
+  border: none;
+  /* Optionally, you can add padding and margin to adjust the spacing around the input box */
+   padding: 5px;
+/*   margin: 5px; */
+  background-color: #21222D;
+    /* 댓글 내용 */
+    color: white;
+    margin: 10px 0;
+    width: 80%;
+}
+
+
+.comment_content>div{
+    color: #A4A4A4;
+    font-size: 15px;
+}
+
+.comment_content>div:nth-child(2){
+    /* 댓글 내용 */
+    color: #A4A4A4;
+/*     margin: 20px 0; */
+/*     width: 80%; */
+}
+
+.comment_content>div:nth-child(3){
+    /* 댓글 날짜, 좋아요 등 */
+    color: #A4A4A4;
+    display: flex;
+/*     justify-content: space-between; */
+/*     margin-right: 20px; */
+    margin-bottom: 10px;
+}
+
+.comment_content>div:nth-child(3)>button{
+    color: white;
+    border: none;
+    background-color: inherit;
+}
+
+.like_button:hover{
+    /* 댓글 좋아요버튼 (하트) */
+    cursor: pointer;
+}
+
+/* 댓글 수정&삭제 */
+.modBtn{
+	border: 0;
+  	background-color: transparent;
+/*   	margin-left: 92%; */
+	margin-top : 5px;
+	margin-bottom : 3px;
+	color: #A4A4A4;
+	font-family: "AppleSDGothicNeoR";
+}
+.delBtn{
+	border: 0;
+  	background-color: transparent;
+  	color: #A4A4A4;
+/* 	margin-left: 1%; */
+	font-family: "AppleSDGothicNeoR";
+}
+
+
+.comment_line{
+    /* 구분선 */
+    border-bottom: 1px solid #808080;
+    margin-bottom: 35px;
+    width: 80%;
+}

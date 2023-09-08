@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bewithme.www.repository.CommunityDAO">
+
+<insert id="insert">
+	insert into community(com_title, id, com_category, com_content, nickname)
+	values(#{com_title}, #{id}, #{com_category}, #{com_content}, #{nickname})
+</insert>
+
+<select id="selectListByLatest" resultType="com.bewithme.www.domain.CommunityVO">
+  	select * from community order by com_reg_date desc
+</select>
+
+<select id="selectListByPopularity" resultType="com.bewithme.www.domain.CommunityVO">
+  	select * from community order by com_like_cnt desc
+</select>
+
+<select id="selectRecommendList" resultType="com.bewithme.www.domain.CommunityVO">
+  	select * from community order by com_cnt desc limit 0,5 
+</select>
+
+<select id="selectOne" resultType="com.bewithme.www.domain.CommunityVO">
+  	select * from community where com_num = #{com_num}
+</select>
+
+<update id="updateCom_cnt">
+  	update community set com_cnt = com_cnt +1 where com_num = #{com_num}
+</update>
+
+<update id="updateLike">
+	update community set com_like_cnt = #{com_like_cnt} where com_num = #{com_num}
+</update>
+
+<update id="updateCom_comment_cntUp">
+	update community set com_comment_cnt = com_comment_cnt+1 where com_num = #{com_num}
+</update>
+
+<update id=""></update>
+
+</mapper>

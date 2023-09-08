@@ -1,0 +1,21 @@
+package com.bewithme.www.service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.bewithme.www.domain.ChatVO;
+import com.bewithme.www.repository.ChatDAO;
+
+@Service
+public class ChatServiceImpl implements ChatService {
+
+	@Inject
+	private ChatDAO chatDAO;
+
+	@Override
+	public int insertMsg(ChatVO chat) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+}

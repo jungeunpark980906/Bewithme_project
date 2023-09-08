@@ -1,0 +1,9 @@
+package com.bewithme.www.service;
+
+import com.bewithme.www.domain.ChatVO;
+
+public interface ChatService {
+
+	int insertMsg(ChatVO chat);
+
+}

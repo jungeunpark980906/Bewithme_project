@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bewithme.www.repository.Community_LikeDAO">
+
+<select id="isLike">
+	select * from community_like
+</select>
+
+<insert id="insert" parameterType="com.bewithme.www.domain.Community_LikeVO">
+	insert into community_like(id, com_num) 
+	values(#{id}, #{com_num})
+</insert>
+
+<select id="selectLikeCnt" resultType="int">
+	select count(num) from community_like where com_num = #{com_num}
+</select>
+
+</mapper>

@@ -1,0 +1,56 @@
+package com.bewithme.www.controller;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.bewithme.www.domain.Com_CommentVO;
+import com.bewithme.www.service.Com_CommentService;
+
+@Controller
+@RequestMapping("/com_comment/*")
+public class Com_CommentController {
+
+private static final Logger log = LoggerFactory.getLogger(Com_CommentController.class);
+	 
+	@Inject
+	private Com_CommentService ccsv; 
+	
+	@PostMapping(value="/insert", consumes="application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<String> post(@RequestBody Com_CommentVO ccvo, HttpServletRequest request){
+		HttpSession ses = request.getSession();
+		ccvo.setId("1111");
+		// 추후 로그인이 되는 경우 ccvo.setId(ses.getId());로 변경
+		log.info(">>> ccvo : " + ccvo.toString());
+		
+		int isOk = ccsv.insertCom_Comment(ccvo);
+		return isOk > 0? new ResponseEntity<String>("1",HttpStatus.OK)
+				: new ResponseEntity<String>("0",HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	//community page의 recommedList 출력
+	@GetMapping(value="/commentList/{com_num}", produces = {MediaType.APPLICATION_JSON_VALUE} )
+	public ResponseEntity<List<Com_CommentVO>> selectCom_CommentList(@PathVariable("com_num") int com_num){
+		log.info(">>> com_com_num : " +com_num);
+		List<Com_CommentVO> commentList = ccsv.selectCom_commentList(com_num);
+		log.info(">>> com_List : " +commentList.toString());
+		 
+		return new ResponseEntity<List<Com_CommentVO>>(commentList, HttpStatus.OK);
+		    
+	}	
+
+}

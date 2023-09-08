@@ -1,0 +1,35 @@
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bewithme.www.repository.Com_Comment_LikeDAO">
+
+<select id="isLike" resultType="int">
+	select count(*) from com_comment_like where com_com_num=#{com_com_num} and id=#{id}
+</select>
+
+<insert id="insert">
+	insert into com_comment_like(id, com_com_num) 
+	values(#{id}, #{com_com_num})
+</insert>
+
+<delete id="delete">
+	delete from com_comment_like where com_com_num=#{com_com_num} and id=#{id}
+</delete>
+
+<select id="selectLikeCnt" resultType="int">
+	select count(num) from com_comment_like where com_com_num = #{com_com_num}
+</select>
+
+<select id="getLikeCommentCnt" resultType="int">
+	select com_com_num from com_comment_like where id = #{id}
+</select>
+
+<select id="getLikeCom_CommentCnt" resultType="int">
+	select com_com_num from com_comment_like where id = #{id}
+</select>
+
+<delete id="deleteAllCommentLike">
+	delete from com_comment_like where com_com_num = #{com_com_num}
+</delete>
+
+</mapper>

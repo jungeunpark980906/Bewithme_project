@@ -1,0 +1,718 @@
+/* 전체 틀 css */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-image: url(/resources/img/login.png);
+  color: white;
+  font-family: AppleSDGothicNeoR;
+}
+
+@font-face {
+  font-family: AppleSDGothicNeoB;
+  src: url(/resources/font/AppleSDGothicNeoB.ttf);
+}
+
+@font-face {
+  font-family: AppleSDGothicNeoR;
+  src: url(/resources/font/AppleSDGothicNeoR.ttf);
+}
+
+.container {
+  width: 88vw;
+  height: 83vh;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  background-color: #17181F;
+  border-radius: 40px;
+}
+
+.container>div {
+  display: inline-block;
+}
+
+/* ----------------------------------------------- */
+
+/* 왼쪽 메뉴바 */
+.logo {
+  width: 160px;
+  height: 25px;
+  margin-left: 6%;
+  margin-top: 10%;
+}
+
+.left {
+  width: 11vw;
+  height: 73vh;
+  position: fixed;
+  top: 50%;
+  left: 9%;
+  transform: translate(-50%, -50%);
+  border-radius: 40px;
+  font-family: 'AppleSDGothicNeoB';
+}
+
+.menu_bar {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+  /* 예시로 전체 높이에 따라 가운데 정렬 */
+}
+
+.menu_bar a {
+  text-decoration: none;
+  font-family: AppleSDGothicNeoB;
+  font-size: 17px;
+  color: white;
+}
+
+.menu_bar button{
+  margin-top: 10px;
+  width: 85%;
+  height: 50px;
+  color: white; 
+  border: 0;
+  border-radius: 10px;
+  border: 0;
+  background-color: transparent;
+  text-align: left; /* 왼쪽 정렬 추가 */
+  padding-left: 10px; /* 왼쪽 여백 추가 */
+}
+.menu_bar button:nth-of-type(1){
+  background:linear-gradient(to right, #6C72CD, #CB68C3);
+}
+
+.menu_bar span:not(.not):hover{
+  background-image: linear-gradient(to right, #6C72CD, #CB68C3);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.sebu {
+  margin-top: 70%;
+  margin-left: 10%;
+}
+
+.sebu button {
+  border: 0;
+  background-color: transparent;
+  margin-top: 10%;
+}
+
+.sebu a {
+  font-size: 17px;
+  font-family: AppleSDGothicNeoB;
+  color: white;
+  text-decoration: none;
+}
+
+/* hover시 글자 그라데이션 효과 */
+.sebu a:hover {
+  background-image: linear-gradient(to right, #6C72CD, #CB68C3);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* -------------------------------------------------------------------- */
+/* 가운데 컨텐츠 */
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.center {
+  font-family: 'AppleSDGothicNeoR';
+  box-sizing: border-box;
+  width: 54vw;
+  height: 73vh;
+  position: fixed;
+  top: 50%;
+  left: 47.7%;
+  transform: translate(-50%, -50%);
+  background-color: #21222D;
+  border-radius: 40px;
+  padding: 1% 4% 2% 4%;
+}
+
+.center>h2 {
+  margin-bottom: 1%;
+}
+
+.center-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 과목 표시 부분 */
+.subject {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 14%;
+  width: 95%;
+  height: 18%;
+  box-sizing: border-box;
+}
+
+.subject-content {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  box-sizing: border-box;
+  padding: 2%;
+  width: 26%;
+  height: 90%;
+  margin: 1%;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 1px -1px white;
+}
+.subject-content>p{
+  margin-left: 5%;
+}
+
+.subject>.subject-content:nth-child(2) {
+  background-color: #6C72CD;
+}
+
+.subject>.subject-content:nth-child(3) {
+  background-color: #CB68C3;
+}
+
+.subject>.subject-content:nth-child(4) {
+  background-color: #FFAC4D;
+}
+.subject-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0% 5%;
+  margin-bottom: 5%;
+}
+
+.subject-image{
+  width: 35px;
+  height: 35px;
+  display: inline-block;
+}
+.subject>.subject-content:nth-child(2)>.subject-header>.subject-image{
+  background-image: url(/resources/img/html_35px.png);
+  -webkit-filter: brightness(0) invert(1); 
+  filter: brightness(0) invert(1);
+}
+.subject>.subject-content:nth-child(3)>.subject-header>.subject-image{
+  background-image: url(/resources/img/java.png);
+  -webkit-filter: brightness(0) invert(1); 
+  filter: brightness(0) invert(1);
+}
+.subject>.subject-content:nth-child(4)>.subject-header>.subject-image{
+  background-image: url(/resources/img/spring.png);
+  -webkit-filter: brightness(0) invert(1); 
+  filter: brightness(0) invert(1);
+}
+
+.subject-header>h1{
+  display: inline-block;
+}
+
+/* 잠시.. */
+.subject-content p{
+  font-family: AppleSDGothicNeoB;
+}
+
+.content {
+  display: flex;
+  text-align: center;
+  position: absolute;
+  top: 33%;
+  width: 85%;
+  height: 64%;
+  box-sizing: border-box;
+  padding: 1%;
+}
+
+/* 좋아요 리스트 부분 */
+.like {
+  width: 50%;
+  height: 100%;
+  background-color: #17181F;
+  border-radius: 40px;
+  box-sizing: border-box;
+  padding: 2% 4% 4% 4%;
+}
+
+.like-header,
+.qna-header,.todo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5%;
+}
+
+.like-header>button, .qna-header>button {
+  width: 4vw;
+  height: 3vh;
+  background-color: inherit;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background-image: linear-gradient(#21222D, #21222D), linear-gradient(to bottom right, #6C72CD, #CB68C3);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  cursor: pointer;
+  color: white;
+  font-size: 12px;
+}
+
+.like-container {
+  position: absolute;
+  /* padding: 2%; */
+  width: 40.2%;
+  height: 80%;
+  /* background-color: black; */
+}
+
+.like-content {
+  margin-top: 3%;
+  padding: 5%;
+  background-color: #0e0e13;
+  text-align: left;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 5px 30px #342D3F;
+  transition: 0.2s linear;
+  /* box-shadow: inset -5px -5px 5px -5px #CB68C3; */
+}
+.like-content:hover{
+  box-shadow: 0 0 0 #0e0e13;
+}
+
+.like-content>h4 {
+  margin-bottom: 1%;
+}
+
+.like-content>p {
+  font-size: 12px;
+  margin-left: 1%;
+}
+
+.content-right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 커뮤니티 부분 */
+.qna {
+  flex: 40;
+  background-color: #17181F;
+  margin-bottom: 7%;
+  margin-left: 7%;
+  border-radius: 40px;
+  padding: 4% 8% 4% 8%;
+}
+
+.qna-content {
+  margin-top: 3%;
+  padding: 5%;
+  /* background-color: black; */
+  border: 1px solid transparent;
+  border-color: beige;
+  text-align: left;
+  border-radius: 20px;
+  cursor: pointer;
+
+}
+
+.qna-content>h4 {
+  margin-bottom: 4%;
+  color: #6C72CD;
+}
+
+.qna-content>p {
+  font-size: 15px;
+}
+
+/* ---------------------------------------------- */
+/* todo css부분 */
+.todo {
+  flex: 60;
+  background-color: #17181F;
+  margin-left: 7%;
+  border-radius: 40px;
+  padding: 5% 8% 5% 8%;
+  height: 41%;
+}
+.todo-container{
+  text-align: center;
+     height: 75%;
+    /* 보여지는 부분 잡아놓기 */
+    overflow-x:hidden;
+  
+}
+.todo-container::-webkit-scrollbar {
+    /*  Chrome , Safari , Opera에 사용하는 스크롤 숨기기 */
+   display:none; 
+}
+.todo-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3% 5% 3% 5%;
+  /* background-color: black; */
+  background-color: inherit;
+  border-bottom: 1px solid white;
+  text-align: left;
+}
+
+.todo-content > p{
+  font-size: 14px;
+}
+
+.todo-header>h3{
+	cursor: pointer;
+}
+
+.todo-header>h3:hover{
+	color : #FFAC4D;
+}
+
+.todo-header>input{
+  color: white;
+  background-color: inherit;
+  border: 0;
+  /* height: 20px; */
+  font-size: 15px;
+  border-bottom: 1px solid white;
+}
+.todo-header>button{
+  /* width: 2vw;
+  height: 3vh; */
+  border: none;
+  background-color: inherit;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+.bi-trash3{
+	margin-left:5px;
+	cursor: pointer;
+	
+}
+	/* todo 모달 폼 */
+    .todo-modal {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            visibility: hidden;
+    }
+
+    .todo-modal-content {
+      background-color: #17181F;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+      border-radius: 10px;
+      /*max-height: 550px;*/
+      max-height: 60%;
+    }
+
+    .todo-modal-title {
+    font-family: AppleSDGothicNeoB;
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color : #FFAC4D;
+    }
+
+    .todo-modal-input {
+    font-family: AppleSDGothicNeoR;
+      display: inline-block;
+      width: 60%;
+      margin-bottom: 10px;
+      padding: 5px;
+      box-sizing: border-box;
+      border: none;
+      border-bottom: 1px solid white;
+      color : white;
+      background-color : inherit;
+      outline: none;
+    }
+
+    .todo-modal-button {
+    font-family: AppleSDGothicNeoB;
+      display: inline-block;
+      vertical-align: top;
+      background-color: #FFAC4D;
+      margin-left : 10px;
+      padding: 8px 15px;
+      border: none;
+      cursor: pointer;
+      height : 31px;
+      border-radius: 10px;
+    }
+
+    .todo-modal-list {
+    font-family: AppleSDGothicNeoR;
+      margin-top: 20px;
+      /*order: 1px solid #888;*/
+      padding: 10px;
+      text-align: left;
+      color : white;
+      height : 400px;
+      overflow-x:hidden;
+    }   
+    
+    .todo-modal-list::-webkit-scrollbar {
+	    /*  Chrome , Safari , Opera에 사용하는 스크롤 숨기기 */
+	   display:none;
+	}     
+
+/* ------------------------------------------------ */
+/* 오른쪽 달력부분 */
+
+.right {
+  font-family: 'AppleSDGothicNeoR';
+  box-sizing: border-box;
+  width: 22vw;
+  height: 73vh;
+  position: fixed;
+  top: 50%;
+  left: 90%;
+  transform: translate(-50%, -50%);
+  padding: 1%;
+  border-radius: 40px;
+}
+
+.right>div {
+  height: auto;
+  width: 70%;
+  margin: 0px;
+  padding: 3%;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+
+td {
+  width: 35px;
+  height: 35px;
+
+}
+
+.Calendar {
+  text-align: center;
+}
+
+.Calendar>thead>tr:first-child>td {
+  font-family: 'Questrial', sans-serif;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.Calendar>thead>tr:last-child>td {
+  font-family: 'Questrial', sans-serif;
+  font-weight: 600;
+}
+
+.Calendar>tbody>tr>td>p {
+  font-family: 'Montserrat', sans-serif;
+  height: 30px;
+  width: 30px;
+  border-radius: 45px;
+  transition-duration: .2s;
+  line-height: 27px;
+  margin: 2.5px;
+  display: block;
+  text-align: center;
+}
+
+.pastDay {
+  color: gray;
+}
+
+.today {
+  color: #CB68C3;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.futureDay {
+  color: white;
+  cursor: pointer;
+}
+
+.futureDay.choiceDay,
+.today.choiceDay {
+  background: #6C72CD;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.schedule-add{
+  text-align: center;
+  margin-bottom: 20px;
+  color: #FFAC4D
+}
+
+.schedule-add button{
+  border-radius: 10px;
+  color: #FFAC4D;
+  background-color: inherit;
+  cursor: pointer;
+}
+
+.schedule {
+  margin-bottom: 20px;
+}
+
+.schedule>h4 {
+  margin-bottom: 10px;
+}
+
+.schedule>p {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.schedule button{
+  background-color: inherit;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.schedule button:nth-of-type(1){
+  color: #6C72CD;
+}
+.schedule button:nth-of-type(2){
+  color: #CB68C3;
+}
+
+
+/* 캘린더 추가 모달 디자인 코드 */
+        /* input과 textarea 스타일 */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-bottom: 5px;
+        }
+
+        form input,
+        form textarea {
+            border: none;
+            /* 테두리 없앰 */
+            outline: none;
+            /* 포커스 시 테두리 없앰 */
+        }
+
+        /* input 그룹 스타일 */
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #ccc;
+            /* 수평선 스타일 */
+            margin: 10px 0;
+        }
+
+        /* 모달 헤딩 스타일 */
+        .modal-heading {
+            text-align: center;
+            /* 가운데 정렬 */
+            margin-bottom: 10%;
+            margin-top: 2%;
+        }
+
+        /* 버튼 그룹 스타일 */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 5%;
+        }
+
+        /* 일정 추가 버튼 스타일 */
+        .button-group button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button-group button:hover {
+            background-color: #45a049;
+        }
+
+        /* 모달 폼을 화면 정중앙에 배치하기 위한 CSS */
+        .modal-overlay {
+            visibility: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        
+        .modal {
+      background-color: #17181F;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 300px;
+      border-radius: 10px;
+        }
+        
+                /* 모달 폼을 화면 정중앙에 배치하기 위한 CSS */
+        .modal-overlay-modify {
+            visibility: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        
+        .modal-modify {
+      background-color: #17181F;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      max-width: 300px;
+      border-radius: 10px;
+        }
+        

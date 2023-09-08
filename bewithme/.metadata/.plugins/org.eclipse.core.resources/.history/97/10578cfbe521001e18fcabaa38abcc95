@@ -1,0 +1,5 @@
+package com.bewithme.www.service;
+
+public class ChatServiceImpl implements ChatService {
+
+}

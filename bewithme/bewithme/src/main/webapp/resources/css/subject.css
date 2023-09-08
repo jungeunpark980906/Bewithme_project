@@ -1,0 +1,166 @@
+@font-face {
+    font-family:AppleSDGothicNeoB;
+    src: url(/resources/font/AppleSDGothicNeoB.ttf);
+}
+@font-face {
+    font-family: AppleSDGothicNeoR;
+    src: url(/resources/font/AppleSDGothicNeoR.ttf);
+}
+body{
+    color: white;
+}
+/* 수강목록 박스 */
+/* .sj_list{
+    background-color: #17181F;
+    width: 90%;
+    height: 80%;
+    margin-left: 5%;
+    margin-top: 3%;
+    border-radius: 40px;
+} */
+
+/* 제목:배우기&Html */
+.tt {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display: flex;
+    align-items: center;
+
+  }
+.sj_t{
+    display: inline-block;
+    margin: 0;
+    font-family: AppleSDGothicNeoB;
+    color: white;
+    font-size: 30px;
+}
+.sj_t:nth-child(1){
+    margin-left: 10%;
+    border-radius: 40px;
+    font-size: 15px;
+    border: 0;
+    background:linear-gradient(to right, #6C72CD, #CB68C3);
+    width: 60px;
+    height: 30px;
+}
+.sj_t:nth-child(2){ 
+    margin-left: 10px;
+}
+
+hr {
+    border-width:3px 0 0 0; 
+    border-style:dashed; 
+    border-color:#bbb;
+    border-radius: 4px;
+    width: 80%;
+    margin-left: 10%;
+}
+
+/* 강의수 & 업로드 날짜 & 등록하기 */
+.subtt{
+    display: flex;
+    margin-left: 10%;
+    margin-bottom: 2%;
+
+
+}
+.a {
+  display: inline-block;
+  margin: 0;
+  font-size: 17px;
+  color: white;
+  font-family: AppleSDGothicNeoB;
+}
+
+.a:nth-child(2) {
+    margin-left: 50px; /* 조절 가능한 여백 */
+}
+.a:nth-child(3){
+    margin-left: 50px; /* 조절 가능한 여백 */
+
+}
+
+.sj_reg{
+    display: inline-block;
+    background-color: transparent; /* Remove background color */
+    margin-left: 55%;
+    border: none; /* Remove border */
+}
+.sj_a{
+    text-decoration: none;
+    color: white;
+    font-family: AppleSDGothicNeoB;
+    font-size: 17px;
+
+}
+.sj_a:hover{
+    font-family: AppleSDGothicNeoB;
+    font-size: 17px;
+    color: #808080;
+
+}
+
+/* 강의목록&목록닫기 */
+.kang{
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 10%;
+    display: flex;
+    align-items: center;
+    font-family: AppleSDGothicNeoB;
+    font-size: 17px;
+    /* color: #A4A4A4; */
+}
+.kang button{
+    margin-left: 78%;
+    
+}
+/* 테이블 */
+table {
+    margin-left: 10%;
+    margin-right: 0;
+    border-collapse: collapse;
+    width: 80%;
+  }
+  
+  table th,
+  table td {
+    padding: 2.5%;
+    text-align: left;
+    border: 0;
+    border-bottom: 1px solid #A4A4A4;
+    
+  }
+  
+  table th {
+    /* background-color: #f2f2f2; */
+    font-family: AppleSDGothicNeoR;
+    font-size: 19px;
+    width: 10%;
+
+  }
+  
+  table td {
+    font-family: AppleSDGothicNeoB;
+    font-size: 19px;
+    
+  }
+  .ck{
+    width: 11%;
+    text-align: center;
+  }
+  .ck2{
+    width: 11%;
+    text-align: center;
+  }
+  .ck2:hover{
+    width: 11%;
+    text-align: center;
+    color: #808080;
+  }
+  table a{
+    text-decoration: none;
+    color: white;
+  }
+
+

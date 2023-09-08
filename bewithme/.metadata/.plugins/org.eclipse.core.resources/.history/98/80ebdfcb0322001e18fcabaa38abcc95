@@ -1,0 +1,95 @@
+async function registerMsg(msgData){
+  try{
+    const url="/chat/register";
+    const config={
+      method : "post",
+      headers : {
+        "content-type" : "application/json; charset=utf-8"
+      },
+      body : JSON.stringify(msgData)
+    };
+    const resp=await fetch(url,config);
+    const result=await resp.text();
+    return result;
+  }catch(err){
+    console.log(err);
+  }
+}
+
+async function printMsgList(userId){
+  try{
+    const resp=await fetch("/chat/list/"+userId);
+    const result=await resp.json();
+    return result;
+      }
+      catch(err){
+        console.log(err);
+      }  
+}
+
+
+document.getElementById('msg_send_btn').addEventListener('click',()=>{
+  const msg=document.getElementById('write_msg').value;
+  if(userId==""||userId==null){
+    alert("세션이 완료되었습니다. 다시 로그인 해주세요.")
+    location.href="/member/logout";
+  }
+  else if(msg==""||msg==null){
+    alert("문의할 내용을 작성해주세요.");
+    document.getElementById('write_msg').focus();
+    return false;
+  }
+  else{
+    let toId='';
+    if(userId!='admin'){
+      toId='admin';
+    }
+    let msgData={
+      from_id : userId,
+      to_id : toId,
+      chat_content : msg
+    };
+    console.log("msgData >> "+ msgData);
+    registerMsg(msgData).then(result=>{
+    console.log("msgData result >> "+ result);
+      if(result>0){
+        alert("메세지 전송 성공!");
+        document.getElementById('write_msg').value=null;
+        getMsgList(userId);
+      }
+      else{
+        alert("메세지 전송 실패ㅜ");
+      }
+    })
+  }
+
+})
+
+function getMsgList(userId){
+  printMsgList(userId).then(result=>{
+    const msg_history=document.getElementById('msg_history');
+    msg_history.innerHTML=`<div class="incoming_msg">
+    <div class="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil">
+    </div>
+    <div class="received_msg">
+      <div class="received_withd_msg">
+        <p>안녕하세요. ${ses.nickname}님 무엇을 도와드릴까요?</p>
+        <span class="time_date"> 11:01 AM | June 9</span>
+      </div>
+    </div>
+  </div>`;
+    if(result.length>0){
+    let div='';
+    for(let ChatVO of result){
+      div+=`<div class="outgoing_msg">
+      <div class="sent_msg">
+        <p>${ChatVO.chat_content}</p>
+        <span class="time_date"> ${ChatVO.chat_time}</span>
+      </div>
+    </div>`
+    }
+    msg_history.innerHTML+=div;
+    }
+
+  })
+}

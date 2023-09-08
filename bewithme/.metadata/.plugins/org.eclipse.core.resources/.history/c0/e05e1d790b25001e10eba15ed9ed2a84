@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bewithme.www.repository.Com_CommentDAO">
+
+<insert id="insert">
+  	insert into com_comment(id, com_num, com_com_content)
+	values(#{id}, #{com_num}, #{com_com_content})
+</insert>
+
+<select id="selectList" resultType="com.bewithme.www.domain.Com_CommentVO">
+	select * from com_comment where com_num = #{com_num} 
+</select>
+
+</mapper>

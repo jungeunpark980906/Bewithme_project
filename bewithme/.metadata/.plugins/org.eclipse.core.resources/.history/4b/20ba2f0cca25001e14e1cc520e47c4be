@@ -1,0 +1,14 @@
+package com.bewithme.www.service;
+
+import java.util.List;
+
+import com.bewithme.www.domain.Com_CommentVO;
+
+public interface Com_CommentService {
+
+	int insertCom_Comment(Com_CommentVO ccvo);
+
+	List<Com_CommentVO> selectCom_commentList(int com_com_num);
+
+	int modifyCom_Comment(Com_CommentVO ccvo);
+}

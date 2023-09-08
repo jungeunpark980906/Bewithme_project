@@ -1,0 +1,5 @@
+package com.bewithme.www.repository;
+
+public interface ChatBotDAO {
+
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bewithme.www.repository.Com_FileDAO">
+
+<insert id="insertFile">
+	insert into com_file (com_file_uuid, com_file_save_dir, com_file_name, com_file_type, com_num, com_file_size)
+	values(#{com_file_uuid}, #{com_file_save_dir}, #com_file__name}, #{com_file__type}, #{com_num}, #{com_file__size})
+</insert>
+
+
+
+</mapper>

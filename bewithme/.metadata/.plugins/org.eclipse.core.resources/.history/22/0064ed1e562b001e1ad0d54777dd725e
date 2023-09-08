@@ -1,0 +1,9 @@
+package com.bewithme.www.repository;
+
+import com.bewithme.www.domain.BookmarkVO;
+
+public interface BookmarkDAO {
+
+	int isBook(BookmarkVO bookvo);
+
+}

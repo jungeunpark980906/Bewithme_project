@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bewithme.www.repository.CourseDAO">
+
+	<!-- 게시판 insert -->
+	<insert id="insertCourse" parameterType="com.bewithme.www.domain.CourseVO">
+		insert into course (cou_title, cou_content,sub_num,id)
+		values (#{cou_title},#{cou_content},#{sub_num},#{id})
+	</insert>
+
+	<select id="getList" resultType="com.bewithme.www.domain.CourseVO">
+		select * from course where sub_num=#{sub_num} and cou_isDel="N"
+	</select>
+	
+	<select id="getTitleContent" resultType="com.bewithme.www.domain.CourseVO">
+		select * from course where cou_num=#{cou_num}
+	</select>
+	
+	<select id="courseCount" resultType="int">
+		select count(cou_num) from course where sub_num = #{sub_num}
+	</select>
+	
+	<delete id="remove">
+		delete from course where cou_num=#{cou_num}
+	</delete>
+	
+	<update id="cou_cnt">
+		update course set cou_cnt = cou_cnt+1 where cou_num=#{cou_num}
+	</update>
+	
+
+	
+	
+</mapper>

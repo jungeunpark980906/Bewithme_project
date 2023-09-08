@@ -1,0 +1,12 @@
+package com.bewithme.www.repository;
+
+import java.util.List;
+
+import com.bewithme.www.domain.Com_CommentVO;
+
+public interface Com_CommentDAO {
+
+	int insert(Com_CommentVO ccvo);
+
+	List<Com_CommentVO> selectList(int com_num);
+}

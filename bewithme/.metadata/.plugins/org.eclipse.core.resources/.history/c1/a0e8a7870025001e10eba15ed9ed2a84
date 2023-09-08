@@ -1,0 +1,8 @@
+package com.bewithme.www.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class Com_CommentServiceImpl implements Com_CommentService{
+
+}

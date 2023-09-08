@@ -1,0 +1,251 @@
+-- DB설정
+> mysql -uroot -pezen
+
+create database bewithme;
+
+use mysql;
+
+grant all privileges on bewithme. * to 'bewithme'@'localhost'with grant option;
+
+flush privileges;
+
+
+
+> mysql -ubewithme -pbewithme
+
+use bewithme;
+
+
+-- user 테이블
+create table user(
+id varchar(100) not null, 
+pw varchar(100) not null, 
+nickname varchar(100) not null, 
+reg_date datetime default now(),
+admin tinyint(1) default 0,
+primary key(id));
+
+-- todo 테이블
+create table todo(
+todo_num int not null auto_increment,
+todo_content varchar(200) not null,
+id varchar(100) not null,
+primary key(todo_num),
+foreign key(id) references user(id)
+on delete cascade
+);
+
+-- community 테이블
+create table community(
+com_num int not null auto_increment,
+com_title varchar(100) not null,
+com_content text not null,
+com_cnt int not null default 0,
+com_category varchar(100) not null,
+com_reg_date datetime default now(),
+com_isDel varchar(50) default 'N',
+id varchar(100) not null,
+primary key(com_num),
+foreign key(id) references user(id)
+on delete cascade
+);
+
+
+create table com_comment(
+com_com_num int not null auto_increment,
+com_com_content text not null,
+com_com_reg_date datetime default now(),
+com_com_mod_date datetime default now(),
+com_num int not null,
+id varchar(100) not null, 
+primary key(com_com_num),
+foreign key(id) references user(id)
+on delete cascade,
+foreign key(com_num) references community(com_num)
+on delete cascade
+);
+
+create table com_file(
+com_file_uuid varchar(256) not null,
+com_file_save_dir varchar(256) not null,
+com_file_name varchar(256) not null,
+com_file_type tinyint(1) default 0,
+com_file_size int,
+com_file_reg_date datetime default now(),
+com_num int not null,
+primary key(com_file_uuid),
+foreign key(com_num) references community(com_num)
+on delete cascade
+);
+
+create table community_like(
+num int not null auto_increment,
+id varchar(100) not null,
+com_num int not null,
+primary key(num),
+foreign key(id) references user(id)
+on delete cascade,
+foreign key(com_num) references community(com_num)
+on delete cascade
+);
+
+create table com_comment_like(
+num int not null auto_increment,
+id varchar(100) not null,
+com_com_num int not null,
+primary key(num),
+foreign key(id) references user(id)
+on delete cascade,
+foreign key(com_com_num) references com_comment(com_com_num)
+on delete cascade
+);
+
+-- subject 테이블
+
+create table subject(
+sub_num int  not null auto_increment,
+sub_title varchar(100) not null,
+sub_reg_date datetime default now(),
+id varchar(100) not null,
+primary key(sub_num),
+foreign key(id)
+references user(id)
+on delete cascade
+);
+
+create table course(
+cou_num int not null auto_increment,
+cou_title varchar(100) not null,
+cou_content text not null,
+cou_cnt  int not null default 0,
+cou_reg_date datetime not null default now(),
+cou_isDel varchar(50) default 'N',
+sub_num int not null,
+primary key(cou_num),
+foreign key(sub_num)
+references subject(sub_num)
+on delete cascade
+);
+
+create table bookmark(
+num int not null auto_increment,
+id varchar(100) not null, 
+cou_num int not null,
+primary key(num),
+foreign key(id)
+references user(id)
+on delete cascade,
+foreign key(cou_num)
+references course(cou_num)
+on delete cascade
+);
+
+create table cou_file(
+cou_file_uuid varchar(256) not null,
+cou_file_save_dir varchar(256) not null,
+cou_file_name varchar(256) not null,
+cou_file_type tinyint(1) default 0,
+cou_file_size int,
+cou_file_reg_date datetime default now(),
+cou_num int not null,
+primary key(cou_file_uuid),
+foreign key(cou_num)
+references course(cou_num)
+on delete cascade
+);
+
+create table cou_comment(
+cou_com_num int not null auto_increment,
+cou_com_content text not null,
+cou_com_reg_date datetime default now(),
+cou_com_mod_date datetime default now(),
+id varchar(100) not null, 
+cou_num int not null,
+primary key(cou_com_num),
+foreign key(id)
+references user(id)
+on delete cascade,
+foreign key(cou_num)
+references course(cou_num)
+on delete cascade
+);
+
+create table cou_comment_like(
+num int not null auto_increment,
+id varchar(100) not null, 
+cou_com_num int not null,
+primary key(num),
+foreign key(id)
+references user(id)
+on delete cascade,
+foreign key(cou_com_num)
+references cou_comment(cou_com_num)
+on delete cascade
+);
+
+-- qna 테이블
+create table qna(
+qna_num int not null auto_increment,
+id varchar(100) not null, 
+qna_title varchar(100) not null,
+qna_content text not null,
+qna_cnt int not null default 0,
+qna_category varchar(100) not null,
+qna_reg_date datetime default now(),
+qna_isDel varchar(50) default 'N',
+primary key(qna_num),
+foreign key(id) references user(id)
+on delete cascade
+);
+
+create table qna_comment(
+qna_com_num int not null auto_increment,
+id varchar(100) not null, 
+qna_com_content text not null,
+qna_com_reg_date datetime default now(),
+qna_num int not null,
+primary key(qna_com_num),
+foreign key(qna_num) references qna(qna_num)
+on delete cascade,
+foreign key(id) references user(id)
+on delete cascade
+);
+
+create table qna_file(
+qna_file_uuid varchar(256) not null,
+qna_file_save_dir varchar(256) not null,
+qna_file_name varchar(256) not null,
+qna_file_type tinyint(1) default 0,
+qna_file_size int,
+qna_file_reg_date datetime default now(),
+qna_num int not null,
+primary key(qna_file_uuid),
+foreign key(qna_num) references qna(qna_num)
+on delete cascade
+);
+
+create table qna_like(
+num int not null auto_increment,
+id varchar(100) not null,
+qna_num int not null,
+primary key(num),
+foreign key(id) references user(id)
+on delete cascade,
+foreign key(qna_num) references qna(qna_num)
+on delete cascade
+);
+
+create table qna_comment_like(
+num int not null auto_increment,
+id varchar(100) not null,
+qna_com_num int not null,
+primary key(num),
+foreign key(id) references user(id)
+on delete cascade,
+foreign key(qna_com_num) references qna_comment(qna_com_num)
+on delete cascade
+);
+
+
+
+

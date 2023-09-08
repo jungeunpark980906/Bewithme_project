@@ -1,0 +1,9 @@
+package com.bewithme.www.service;
+
+import com.bewithme.www.domain.ChatBotVO;
+
+public interface ChatBotService {
+
+	int registerChatBot(ChatBotVO cbvo);
+
+}

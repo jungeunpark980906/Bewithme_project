@@ -1,0 +1,148 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+@font-face {
+    font-family:AppleSDGothicNeoB;
+    src: url(/resources/font/AppleSDGothicNeoB.ttf);
+}
+@font-face {
+    font-family: AppleSDGothicNeoR;
+    src: url(/resources/font/AppleSDGothicNeoR.ttf);
+}
+body{
+    background-image: url(/resources/img/login.png);
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+}
+/* 로고 */
+.logo{
+    width: 160px;
+    height: 25px;
+    margin-left: 6%;
+    margin-top: 10%;
+}
+/* 뒷 검정 상자 */
+.container{
+    width: 88vw;
+    height: 83vh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #17181F;
+    border-radius: 40px;
+}
+/* 왼쪽 메뉴바 상자 */
+.left{
+    width: 11vw;
+    height: 73vh;
+    position: fixed;
+    top: 50%;
+    left: 9%;
+    transform: translate(-50%, -50%);
+    /* background-color: darkslateblue; */
+    border-radius: 40px;
+}
+/* 오른쪽 상자 */
+.right{
+    width: 70vw;
+    height: 73vh;
+    position: fixed;
+    top: 50%;
+    left: 57%;
+    transform: translate(-50%, -50%);
+    background-color: #21222D;    
+    border-radius: 40px;
+}
+/* 메뉴바 */
+.menu_bar{
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 40vh; /* 예시로 전체 높이에 따라 가운데 정렬 */
+}
+.menu_bar a{
+    text-decoration: none;
+    font-family: AppleSDGothicNeoB;
+    font-size: 17px;
+    color: white;
+}
+
+.menu_bar button{
+    margin-top: 10px;
+    width: 85%;
+    height: 50px;
+    color: white; 
+    border: 0;
+    border-radius: 10px;
+    /* background:linear-gradient(to right, #6C72CD, #CB68C3); */
+    border: 0;
+    background-color: transparent;
+    text-align: left; /* 왼쪽 정렬 추가 */
+    padding-left: 10px; /* 왼쪽 여백 추가 */
+}
+.menu_bar button:nth-of-type(2){
+    margin-top: 10px;
+    width: 85%;
+    height: 50px;
+    color: white; 
+    border: 0;
+    border-radius: 10px;
+    background:linear-gradient(to right, #6C72CD, #CB68C3);
+}
+/* .menu_bar button:hover{
+    margin-top: 10px;
+    width: 85%;
+    height: 50px;
+    color: white; 
+    border: 0;
+    border-radius: 10px;
+    background:linear-gradient(to right, #6C72CD, #CB68C3);
+} */
+/* 셋팅&로그아웃 */
+.sebu{
+    margin-top: 70%;
+    margin-left: 10%;
+}
+.sebu button{
+    border: 0;
+    background-color: transparent;
+    margin-top: 10%;
+}
+.sebu a{
+    font-size: 17px;
+    font-family: AppleSDGothicNeoB;
+    color: white;
+    text-decoration: none;
+}
+
+/* 정으니가 보내준거 */
+.menu_bar button{
+    margin-top: 10px;
+    width: 85%;
+    height: 50px;
+    color: white; 
+    border: 0;
+    border-radius: 10px;
+    border: 0;
+    background-color: transparent;
+    text-align: left; /* 왼쪽 정렬 추가 */
+    padding-left: 10px; /* 왼쪽 여백 추가 */
+}
+
+/* hover 안되게 하는것 */
+.menu_bar span:not(.not):hover{
+    background-image: linear-gradient(to right, #6C72CD, #CB68C3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+.sebu a:hover{
+    background-image: linear-gradient(to right, #6C72CD, #CB68C3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}

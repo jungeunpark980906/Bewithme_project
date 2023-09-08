@@ -1,0 +1,37 @@
+package com.bewithme.www.service;
+
+import java.io.Console;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.bewithme.www.domain.ChatVO;
+import com.bewithme.www.repository.ChatDAO;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+public class ChatServiceImpl implements ChatService {
+
+	@Inject
+	private ChatDAO chatDAO;
+
+	@Override
+	public int insertMsg(ChatVO chat) {
+		// TODO Auto-generated method stub
+		log.info("chatService 진입!!");
+		int isOk=chatDAO.insertMsg(chat);
+		return isOk;
+	}
+
+	@Override
+	public List<ChatVO> getList(String fromId) {
+		// TODO Auto-generated method stub
+		log.info("chatService getList 진입!!");
+		List<ChatVO> list=chatDAO.getList(fromId);
+		return list;
+	}
+}

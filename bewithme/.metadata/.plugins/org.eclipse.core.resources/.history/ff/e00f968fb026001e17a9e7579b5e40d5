@@ -1,0 +1,428 @@
+@font-face {
+    font-family: "AppleSDGothicNeoB";
+    src: url(/resources/font/AppleSDGothicNeoB.ttf);
+}
+@font-face {
+    font-family: "AppleSDGothicNeoR";
+    src: url(/resources/font/AppleSDGothicNeoR.ttf);
+}
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-image: url(/resources/img/login.png);
+    background-size: cover;
+    font-family: "AppleSDGothicNeoR";
+}
+.container{
+    width: 88vw;
+    height: 83vh;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #17181F;
+    border-radius: 40px;
+}
+.right{
+    width: 70vw;
+    height: 73vh;
+    position: fixed;
+    top: 50%;
+    left: 57%;
+    transform: translate(-50%, -50%);
+    background-color: #21222D;    ;
+    border-radius: 40px;
+    color: white;
+}
+.left{
+    width: 11vw;
+    height: 73vh;
+    position: fixed;
+    top: 50%;
+    left: 9%;
+    transform: translate(-50%, -50%);
+    border-radius: 40px;
+    font-family: "AppleSDGothicNeoB";
+
+}
+
+/* == left == */
+.logo{
+    width: 160px;
+    height: 25px;
+    margin-left: 6%;
+    margin-top: 10%;
+}
+.menu_bar{
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 40vh; /* 예시로 전체 높이에 따라 가운데 정렬 */
+}
+.menu_bar a{
+    text-decoration: none;
+    font-family: "AppleSDGothicNeoB";
+    font-size: 17px;
+    color: white;
+}
+
+.menu_bar button{
+    margin-top: 10px;
+    width: 85%;
+    height: 50px;
+    color: white; 
+    border: 0;
+    border-radius: 10px;
+    border: 0;
+    background-color: transparent;
+    text-align: left; /* 왼쪽 정렬 추가 */
+    padding-left: 10px; /* 왼쪽 여백 추가 */
+}
+.menu_bar button:nth-of-type(3){
+    background:linear-gradient(to right, #6C72CD, #CB68C3);
+}
+
+.menu_bar span:not(.not):hover{
+    background-image: linear-gradient(to right, #6C72CD, #CB68C3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.sebu{
+    margin-top: 70%;
+    margin-left: 10%;
+}
+.sebu button{
+    border: 0;
+    background-color: transparent;
+    margin-top: 10%;
+}
+.sebu a{
+    font-size: 17px;
+    font-family: "AppleSDGothicNeoB";
+    color: white;
+    text-decoration: none;
+}
+.sebu a:hover{
+    background-image: linear-gradient(to right, #6C72CD, #CB68C3);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+
+/* == right == */
+
+
+/* nav_bar */
+.nav_bar{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 70px;
+}
+
+/* 전체, 기술, 상담, MY 선택버튼 */
+.nav>button{
+    width: 70px;
+    height: 40px;
+
+    /* 버튼 테두리만 그라데이션 효과 */
+    border-radius: 20px;
+    border: 3px solid transparent;
+    background-image: linear-gradient(#21222D, #21222D), linear-gradient(to bottom right, #6C72CD, #CB68C3);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    
+    color: white;
+    font-size: 15px;
+    margin-right: 15px;
+    margin: 50px 15px 10px 0;
+    font-weight: 700;
+}
+
+.nav>button:first-child{
+    background-image : linear-gradient(to bottom right, #6C72CD, #CB68C3), linear-gradient(to bottom right, #6C72CD, #CB68C3);
+    font-weight : '700';
+}
+
+.nav>button:hover{
+   cursor: pointer;
+}
+
+/* 질문쓰기 */
+.question>button{
+    width: 90px;
+    height: 40px;
+    color: white;
+    background-color: inherit;
+    border: none;
+    border-radius: 10px;
+    margin-top: 55px;
+    font-size: 15px;
+}
+
+.question>button:hover{
+    color: #FFAC4D;
+    font-weight: 700;
+}
+
+
+/* 구분선 */
+.nav_line{
+    border-bottom: 1px solid #808080 ;
+    margin: 0px 30px;
+}
+
+/* main */
+.main{
+    margin: 10px 100px;
+    height: 550px;
+    /* 보여지는 부분 잡아놓기 */
+    overflow-x:hidden;
+}
+.main::-webkit-scrollbar {
+    /*  Chrome , Safari , Opera에 사용하는 스크롤 숨기기 */
+	display:none; 
+}
+
+/* 오늘의 추천 질문 */
+.recommend_coment{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.recommend_coment>span{
+    /* 오늘의 추천 질문 글 */
+    font-size: 25px;
+}
+
+.recommend_coment>.button_list>button{
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+}
+
+.recommend_coment svg{
+    /* 오늘의 추천 질문 화살표 */
+    margin-right: 15px;
+    padding-top: 10px;
+    color: #808080;
+}
+
+.recommend_coment svg:hover{
+    color: white;
+}
+
+
+/* 추천 질문이 뜨는 전체 div */
+.recommend{
+    width: 100%;
+    height: 170px;
+    display: flex;
+    margin-bottom: 20px;
+    overflow-x: hidden;
+}
+
+/* 추천 질문 하나의 div */
+.recommend_post{
+    width: 30%;
+    height: 160px;
+    display: inline-block;
+    border: 1px solid white;
+    border-radius: 10px;
+    margin-right:4%;
+    flex-shrink: 0;
+
+}
+
+
+
+.recommend_post:last-child{
+    margin: 0;
+}
+
+.recommend_post>div{
+    margin: 20px 15px 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+}
+
+.recommend_post>div:first-child{
+    /* 추천 질문 분류 색상 */
+    display: inline-block;
+} 
+
+.recommend_post a{
+    /* 추천 질문 제목 */
+    display: inline-block;
+    margin: 10px 10px 40px 15px;
+    font-size: 20px;
+    text-decoration: none;
+    color: white;
+
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.recommend_post a:hover{
+    text-decoration: underline;
+}
+
+
+.recommend_post span{
+    /* 추천 질문 댓글수, 좋아요 수 */
+    font-size: 12px;
+}
+
+
+
+/* 정렬 선택 (최신순, 인기순) */
+.sort_bar{
+    display: flex;
+    justify-content: space-between;
+}
+.sort>button{
+    width: 50px;
+    height: 30px;
+    background-color: inherit;
+    border: none;
+    
+    color: #6C72CD;
+    font-size: 15px;
+    margin-right: 10px;
+    padding-top: 15px;
+}
+
+.sort>button:first-child{
+    color: white;
+    font-weight: 700;
+}
+
+.sort>button:hover{
+    cursor: pointer;
+}
+
+/* 검색 */
+.search{
+    font-size: 16px;
+    width: 200px;
+    height: 40px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.search>img{
+    width: 20px;
+    height: 20px;
+}
+
+.search>input{
+    border: 0;
+    height: 30px;
+    color: white;
+    background-color: inherit;
+    border-bottom: 2px solid white;
+    margin-left: 5px;
+    font-size: 13px;
+    font-family: "AppleSDGothicNeoR";
+}
+
+.search>input:focus{
+    outline: none;
+}
+
+/* 구분선 */
+.main_line{
+    border-bottom: 1px solid #808080;
+    margin-bottom: 20px;
+}
+
+
+/* 출력되는 게시판 */
+.board{
+    margin-left: 5px;
+}
+
+
+.content_left{
+    display: inline-block;
+    width: 80%;
+    height: 120px; 
+}
+.content_left>.title>a{
+    font-size: 25px;
+    margin-bottom: 10px;
+    text-decoration: none;
+    color: white; 
+}
+.content_left>.title>a:hover{
+    text-decoration: underline;
+}
+
+.content_left>.reaction>div{
+    display: inline;
+    font-size: 13px;
+    color: 	#F6F6F6;
+}   
+.content{
+    margin-top: 20px;
+    color: #E2E2E2;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 15px
+}
+
+.content_bottom{
+    display: flex;
+    justify-content: space-between;
+    width: 75%;
+    margin-bottom: 30px; 
+} 
+
+.content_bottom>button{
+    width: 20px;
+    height: 20px;
+    color: white;
+    background-color: inherit;
+    border: none;
+}
+
+.content_bottom>button:hover{
+    cursor: pointer; 
+    color: #FFAC4D;
+}
+ 
+
+.content_bottom>span{
+    color: 	#A4A4A4;
+    font-size: 15px;
+}
+
+/* 이미지 */
+.content_right{
+    width: 20%;
+    float: right; 
+    display: inline;  
+    text-align: center;
+}
+.content_right>img{
+    width: 150px;
+    height: 150px;
+    border-radius: 20px;
+}
+

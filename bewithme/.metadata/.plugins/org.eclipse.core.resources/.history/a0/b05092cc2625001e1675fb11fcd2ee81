@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.bewithme.www.repository.ChatDAO">
+  	<insert id="insertMsg">
+  		insert into chat(from_id, to_id, chat_content)
+  		values(#{from_id},#{to_id},#{chat_content})
+  	</insert>
+  	<select id="getList" resultType="com.bewithme.www.domain.ChatVO">
+  		select * from chat where from_id=#{fromId} or to_id=#{fromId} order by chat_time
+  	</select>
+  	<select id="getUserList" resultType="com.bewithme.www.domain.ChatVO">
+  		select c1.from_id, c1.chat_time, c1.chat_content
+  		from chat c1
+  		join( select from_id, MAX(chat_time) AS max_chat_time
+  		from chat where from_id != 'admin' group by from_id )
+  		c2 ON c1.from_id = c2.from_id AND c1.chat_time = c2.max_chat_time
+  		order by chat_time;
+  	</select>
+  </mapper>

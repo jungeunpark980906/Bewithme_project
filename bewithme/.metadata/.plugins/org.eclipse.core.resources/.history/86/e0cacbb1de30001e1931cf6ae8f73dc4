@@ -1,0 +1,245 @@
+package com.bewithme.www.controller;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.bewithme.www.Handler.CommunityFileHandler;
+import com.bewithme.www.domain.Com_FileVO;
+import com.bewithme.www.domain.CommunityDTO;
+import com.bewithme.www.domain.CommunityVO;
+import com.bewithme.www.domain.Community_LikeVO;
+import com.bewithme.www.domain.UserVO;
+import com.bewithme.www.service.CommunityService;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Controller
+@RequestMapping("/community/*")
+public class CommunityController {
+
+	private static final Logger log = LoggerFactory.getLogger(CommunityController.class);
+	
+	@Inject
+	private CommunityService csv;
+	@Inject
+	private CommunityFileHandler fhd;
+	
+	//community_reg page로 이동
+	@GetMapping("/insert")
+	public String insertComunnityGet(){
+		return "/community/community_reg";
+	}
+	
+	//community insert
+	@PostMapping("/insert")
+	public String insertComunnityPost(CommunityVO cvo, RedirectAttributes rAttr,
+			@RequestParam(name="files", required = false)MultipartFile[] files) {
+		
+		log.info(">>> cvo : " + cvo.toString());
+		log.info(">>> files : " + files.toString());
+
+		List<Com_FileVO> fList = null;
+		if(files[0].getSize()>0) { //데이터가 있는 경우 (파일이 있음)
+			fList = fhd.uploadFiles(files); 
+		}else {
+			log.info("file null 파일 없음!");
+		}
+		
+		CommunityDTO cdto = new CommunityDTO(cvo, fList);
+		
+		int isOk = csv.insertCommunity(cdto);
+		if(isOk>0) {
+			log.info("게시물 저장 완료!");
+		}
+		else {
+			log.info("게시물 저장 실패!");
+		}
+		return "redirect:/community/communitypage";
+	}
+	//썸머노트 이미지 코드 수정
+	  @RequestMapping(value="/SummerNoteImageFile" , method = RequestMethod.POST)
+		public @ResponseBody String SummerNoteImageFile(@RequestParam("file") MultipartFile file) {
+		  log.info("file : "+ file);
+			String url = csv.SummerNoteImageFile(file);
+			 System.out.println(url);
+			return url;
+		}
+	
+	//community page로 이동
+	@GetMapping({"/community", "/communitypage"})
+	public String CommunityPage(){
+		return "/community/community";
+	}
+	
+	//community page의 recommedList 출력
+	@GetMapping(value="/recommendList", produces = {MediaType.APPLICATION_JSON_VALUE} )
+	public ResponseEntity<List<CommunityVO>> selectReCommunityList(){
+		
+		List<CommunityVO> recommendList = csv.selectRecommendList();
+	    return new ResponseEntity<>(recommendList, HttpStatus.OK);
+	    
+	}
+	
+	//community page의 communityList 출력
+	@GetMapping(value="/communityList/{sort_type}", produces = {MediaType.APPLICATION_JSON_VALUE} )
+	public ResponseEntity<Map<String, Object>> selectCommunityList(@PathVariable("sort_type") String sortType,  HttpServletRequest request){
+		
+		//현재 로그인한 id
+		HttpSession ses = request.getSession();
+		UserVO sesUser = (UserVO)ses.getAttribute("ses");
+		String id = sesUser.getId();
+		
+		//좋아요 리스트와 전체리스트를 담을 map
+		Map<String, Object> listMap = new HashMap<>(); 
+		
+		//해당id가 좋아요한 게시글 번호리스트
+		List<Integer> likeList = csv.getLikeCommentCnt(id); 
+		listMap.put("likeList", likeList);
+		log.info(">>> likeList :"+likeList);
+		
+		
+		//최신순, 인기순 별 게시글 전체 리스트
+		if (sortType.equals("0")) {
+		        // 최신순
+				List<CommunityVO> communityList = csv.selectComunnityListByLatest();
+		        listMap.put("communityList", communityList);
+		    } else if (sortType.equals("1")) {
+		        // 인기순
+		    	List<CommunityVO> communityList = csv.selectComunnityListByPopularity();
+		        listMap.put("communityList", communityList);
+		    } else {
+		        // 잘못된 sort_type 값
+		        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		    }
+		    return new ResponseEntity<>(listMap, HttpStatus.OK);
+	}
+	
+	
+	//detail 상세정보 
+	@GetMapping("/detail")
+	public String detailCommunity(@RequestParam("com_num")int com_num, Model m){
+		
+		log.info(">>> com_num : " + com_num);
+		
+		CommunityDTO cdto = csv.detailCommunity(com_num);
+		log.info(">>> com_num의 cvo : " + cdto.getCvo().toString());
+		log.info(">>> com_num의 flist : " + cdto.getflist());
+		m.addAttribute("cvo", cdto.getCvo());
+		m.addAttribute("flist", cdto.getflist());
+		
+		//조회수 +1
+		int isOk = csv.updateCommunityCount(com_num);
+		log.info(">>> 조회수 +1 : " + ( isOk>0 ? "성공" : "실패"));
+		
+		return "/community/com_comment";
+	} 
+	
+	//수정 정보 출력
+	@GetMapping("/modifypage")
+	public String modifyCommunitypage(@RequestParam("com_num")int com_num, Model m){
+		
+		log.info(">>> com_num : " + com_num);
+	
+		CommunityDTO cdto = csv.detailCommunity(com_num);
+		log.info(">>> com_num의 cvo : " + cdto.getCvo().toString());
+		log.info(">>> com_num의 flist : " + cdto.getflist());
+		m.addAttribute("cvo", cdto.getCvo());
+		m.addAttribute("flist", cdto.getflist());
+
+		
+		return "/community/community_mod";
+	}
+	
+	//수정
+	@PutMapping(value="/modify", consumes="application/json", produces = {MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<String> modifyComunnity(@RequestBody CommunityVO cvo) {
+		log.info(">>> cvo : " + cvo.toString());
+		int isOk = csv.updateCommunity(cvo);
+		
+		return isOk > 0? new ResponseEntity<String>("1",HttpStatus.OK)
+				: new ResponseEntity<String>("0",HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	//삭제
+	@DeleteMapping(value="/{com_num}",  produces = {MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<String> deleteComunnity(@PathVariable("com_num") int com_num) {
+		log.info(">>> com_num : " + com_num);
+		int isOk = csv.deleteCommunity(com_num);
+		
+		return isOk > 0? new ResponseEntity<String>("1",HttpStatus.OK)
+				: new ResponseEntity<String>("0",HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	
+	
+	//좋아요 업데이트(community_like에 추가/삭제 -> community like_cnt 자동 업데이트)
+	@GetMapping(value="/updateLike/{btnVal}", produces = {MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<String> updateCommunityLike(@PathVariable("btnVal") int com_num, HttpServletRequest request){
+		
+		log.info(">>> com_num : " + com_num);
+		HttpSession ses = request.getSession();
+		UserVO sesUser = (UserVO)ses.getAttribute("ses");
+		Community_LikeVO clvo = new Community_LikeVO(sesUser.getId(), com_num);
+		
+		int isOk = csv.updateCommunityLike(clvo);
+		log.info(">>> isOk : " + isOk);
+		
+		return isOk > 0? new ResponseEntity<String>("1",HttpStatus.OK)
+				: new ResponseEntity<String>("0",HttpStatus.INTERNAL_SERVER_ERROR);
+	}	
+	
+	//검색
+	@GetMapping(value="/communitySearchList/{searchKeyword}", produces = {MediaType.APPLICATION_JSON_VALUE} )
+	public ResponseEntity<Map<String, Object>> communitySearchList(@PathVariable("searchKeyword") String searchKeyword,  HttpServletRequest request){
+		
+		//좋아요 리스트와 전체리스트를 담을 map
+		Map<String, Object> listMap = new HashMap<>(); 
+		
+		//현재 로그인한 id
+		HttpSession ses = request.getSession();
+		UserVO sesUser = (UserVO)ses.getAttribute("ses");
+		String id = sesUser.getId();
+		
+		//해당id가 좋아요한 게시글 번호리스트
+		List<Integer> likeList = csv.getLikeCommentCnt(id); 
+		log.info("--" + likeList);
+		listMap.put("likeList", likeList);
+		
+		
+		//최신순 게시글 전체 리스트 (제목에 검색 내용이 해당하는)
+		log.info(">>>searchKeyword : "+ searchKeyword);
+		List<CommunityVO> communityList = csv.selectComunnitySearchList(searchKeyword);
+		log.info("--" + communityList);
+		listMap.put("communityList", communityList); 
+
+		return new ResponseEntity<Map<String, Object>>(listMap, HttpStatus.OK);
+	} 
+	
+}
+

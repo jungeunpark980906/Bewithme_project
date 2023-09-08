@@ -1,0 +1,19 @@
+package com.bewithme.www.service;
+
+import java.util.List;
+
+import com.bewithme.www.domain.Com_CommentVO;
+import com.bewithme.www.domain.Community_LikeVO;
+
+public interface Com_CommentService {
+
+	int insertCom_Comment(Com_CommentVO ccvo);
+
+	List<Com_CommentVO> selectCom_commentList(int com_com_num);
+
+	int modifyCom_Comment(Com_CommentVO ccvo);
+
+	int deleteCom_Comment(int com_com_num);
+
+	int updateCom_CommentLike(Com_Comment_LikeVO cclvo);
+}

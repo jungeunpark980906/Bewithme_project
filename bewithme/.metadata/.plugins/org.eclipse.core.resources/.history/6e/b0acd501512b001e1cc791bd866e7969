@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.bewithme.www.repository.TodoDAO">
+  	<insert id="insertTodo" >
+  		insert into todo(id, todo_content)
+  		values(#{id},#{todo_content})
+  	</insert>
+  	<select id="getList" resultType="com.bewithme.www.domain.TodoVO">
+  		select * from todo order by isDel asc, todo_num desc
+  	</select>
+  	<update id="updateTodo" parameterType="int">
+  		update todo set isDel='y'
+  		where todo_num=#{todo_num}
+  	</update>
+  	<select id="selectIsDel" resultType="String">
+  		select isDel from todo where todo_num=#{todo_num}
+  	</select>
+  	<delete id="deleteTodo">
+  		delete from todo where todo_num=#{todo_num}
+  	</delete>
+  </mapper>

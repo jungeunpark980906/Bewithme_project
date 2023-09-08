@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bewithme.www.repository.Cou_CommentDAO">
+	
+	<insert id="register" parameterType="com.bewithme.www.domain.Cou_CommentVO">
+		insert into cou_comment (cou_com_content,id,cou_num,nickname)
+		values(#{cou_com_content},#{id},#{cou_num},#{nickname})
+	</insert>
+	
+	<select id="getList" resultType="com.bewithme.www.domain.Cou_CommentVO">
+		select * from cou_comment where cou_num = #{cou_num}
+	</select>
+	
+	<update id="edit">
+		update cou_comment set cou_com_content=#{cou_com_content}, cou_com_isMod='Y' where cou_com_num=#{cou_com_num}
+	</update>
+	
+	<delete id="remove">
+		delete from cou_comment where cou_com_num=#{cou_com_num}
+	</delete>
+	
+</mapper>

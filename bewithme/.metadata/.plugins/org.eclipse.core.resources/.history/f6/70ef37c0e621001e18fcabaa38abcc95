@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.bewithme.www.repository.ChatDAO">
+  	<insert id="insertChat">
+  		insert into chat(from_id, to_id, chat_content)
+  		values(#{from_id},#{to_id},#{chat_content})
+  	</insert>
+  	<select id="getList" resultType="com.bewithme.www.domain.ChatVO">
+  		select * from calendar order by date
+  	</select>
+  </mapper

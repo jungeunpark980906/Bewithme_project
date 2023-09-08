@@ -1,0 +1,14 @@
+package com.bewithme.www.service;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import com.bewithme.www.repository.ChatDAO;
+
+@Service
+public class ChatServiceImpl implements ChatService {
+
+	@Inject
+	private ChatDAO chatDAO;
+}

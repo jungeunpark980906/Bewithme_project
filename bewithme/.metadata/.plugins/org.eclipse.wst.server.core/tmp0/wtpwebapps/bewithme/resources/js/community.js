@@ -1,0 +1,755 @@
+
+// --  전체, 기술, 커리어, MY 버튼 색상 변경--
+const navBtns = document.querySelectorAll(".navBtns button");
+
+// 전체 버튼 스타일 초기화 함수
+function resetBtnStyle() {
+  navBtns.forEach(btn => {
+    btn.style.backgroundImage = 'linear-gradient(#21222D, #21222D), linear-gradient(to bottom right, #6C72CD, #CB68C3)';
+    btn.style.fontWeight = '';
+  });
+}
+
+navBtns.forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    resetBtnStyle(); // 모든 버튼 스타일 초기화
+    localStorage.setItem('sortVal',"latest"); //모든 버튼 클릭시 최신순으로 출력되도록 설정
+
+    // 클릭된 버튼에 적용할 스타일
+    btn.style.backgroundImage = 'linear-gradient(to bottom right, #6C72CD, #CB68C3), linear-gradient(to bottom right, #6C72CD, #CB68C3)';
+    btn.style.fontWeight = '700';
+
+    //클릭된 버튼의 값을 가져와서 list출력
+    let navVal = e.target.value;
+    console.log(">>> navVal :"+navVal);
+    getRecommendList(navVal); //추천list
+    getCommunityList(0, navVal); //전체list - 최신순 출력
+    });
+});
+
+//클릭한 버튼의 값 (onClick으로 받아옴)
+let kind = "전체"; 
+function kindVal(val){
+  kind = val;  
+  //클릭한 값을 com_community.js로 보내기
+  localStorage.setItem('kind', kind);
+}
+
+
+
+
+
+
+//---------------------------------------------------------------------------------------------------------
+
+// -- 좋아요 버튼 -- 
+
+async function updateLikeFromServer(btnVal){
+	try {
+    const resp =  await fetch("/community/updateLike/" + btnVal);
+    const result = await resp.text();
+    return  result;
+
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+document.addEventListener('click', (e) => {
+
+  if(e.target.classList.contains('like_button')){
+    
+    //내가 클릭한 버튼
+    let btn = e.target.closest('button');
+    let btnVal = btn.value;
+    console.log(">>> 클릭한 버튼 value (com_num) : " + btnVal);
+
+    updateLikeFromServer(btnVal).then(result => {
+      if(result > 0){
+
+        console.log("Controller(DB) -> JS : " + (( result > 0 )? "OK":"FAIL"));
+
+        if(btn.getAttribute("id") === "false"){
+          btn.innerHTML =  `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16"><path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/></svg>`;
+          btn.setAttribute("id", "true");
+          
+
+        }else if(btn.getAttribute("id") === "true"){
+          btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16"><path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/></svg>`;
+          btn.setAttribute("id", "false");
+          
+        }
+        
+      }
+
+    })
+    
+   
+  }else if (e.target.tagName === "svg") {
+    console.log("좋아요 버튼 안의 SVG 태그 클릭했음");
+
+    // 부모 button 클릭 설정
+    let btn = e.target.closest('button');
+    if (btn) {
+      btn.click();
+    }
+  }else if(e.target.tagName === "path"){
+    console.log("좋아요 버튼 안의 SVG 태그-path 클릭했음");
+
+    let btn = e.target.closest('button');
+    if (btn) {
+      btn.click();
+    }
+  }
+})
+
+
+
+
+//-------------------------------------------------------------------------------------------------
+
+// -- 오늘의 추천 질문 --
+
+//오늘의 추천질문 슬라이드 기능
+const rightButton = document.querySelector('.button_right');
+const leftButton = document.querySelector('.button_left');
+const recommendDiv = document.querySelector('.recommend');
+const slideDistance = recommendDiv.offsetWidth + 20; // 추천 질문 div의 너비 + 마진 양쪽 20
+
+// 오른쪽 버튼
+rightButton.addEventListener('click', () => {
+   
+  recommendDiv.scrollTo({
+    left: recommendDiv.scrollLeft + slideDistance,
+    behavior: 'smooth'
+  });
+  
+  // 스크롤이 마지막 div를 넘어갈 경우, 첫 번째 div로 이동
+  if (recommendDiv.scrollLeft + slideDistance >= recommendDiv.scrollWidth) { //recommendDiv.scrollWidth의 전체 너비
+    recommendDiv.scrollTo({
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+});
+
+
+// 왼쪽 버튼
+leftButton.addEventListener('click', () => {
+  
+  recommendDiv.scrollTo({
+    left: recommendDiv.scrollLeft - slideDistance,
+    behavior: 'smooth'
+  });
+  
+  // 스크롤이 첫 번째 div를 넘어갈 경우, 마지막 div로 이동
+  if (recommendDiv.scrollLeft === 0) {
+    recommendDiv.scrollTo({
+      left: recommendDiv.scrollWidth,
+      behavior: 'smooth'
+    });
+  }
+});
+
+
+//DB에서 정보 list로 가져오기(recommendList)
+async function spreadRecommendListFromServer(){
+  try {
+      const resp =  await fetch('/community/recommendList');
+      const result = await resp.json();
+      return result;
+  } catch (error) {
+      console.log("community.js에서 전송 오류" + error)
+  }
+}
+
+//가져온 정보list 화면에 뿌리기
+function getRecommendList(navVal){
+  
+  switch (navVal) {
+    case "전체":
+      spreadRecommendListFromServer().then(result => {
+
+        console.log("Controller(DB) -> JS : " + ( result.length > 0 )? "OK":"FAIL");
+        const recommend_coment = document.getElementById("recommend_coment");
+        recommend_coment.style.display = '';
+        const reContent = document.getElementById("recommend");
+        reContent.style.display = '';
+    
+        //추천 질문 리스트
+        if(result.length > 0){
+          reContent.innerHTML = "";
+          let printCnt = 0;
+          for(let cvo of result){
+            let div = `<div class="recommend_post">`;
+            if(cvo.com_category === '개발'){
+              div += `<div style="color: #9B6DC8;">${cvo.com_category}</div>`;
+            }else{
+              div += `<div style="color: #CB68C3;">${cvo.com_category}</div>`; 
+            }
+            div += `<p><a href="/community/detail?com_num=${cvo.com_num}">${cvo.com_title}</a></p>`;
+            div += `<div><div>`;
+            div += `<span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
+                        <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+                        </svg>
+                        ${cvo.com_comment_cnt} |
+                    </span>`;
+            div += `<span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="10" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                        </svg> ${cvo.com_like_cnt}
+                    </span></div>`;
+            div += `<div>
+                      <span>조회</span> 
+                      <span>${cvo.com_cnt}</span>
+                    </div>`;
+            div += `</div></div>`;
+            reContent.innerHTML += div;
+    
+            printCnt++;
+            if(printCnt >= 6) break; 
+          }
+        }else{
+          let div = `<div>Content Empty</div>`;
+          reContent.innerHTML = div;
+          console.log("추천 질문 데이터가 없습니다.");
+        }
+      });
+      break;
+    case "개발": case "상담":
+      spreadRecommendListFromServer().then(result => {
+
+        console.log("Controller(DB) -> JS : " + ( result.length > 0 )? "OK":"FAIL");
+        const recommend_coment = document.getElementById("recommend_coment");
+        recommend_coment.style.display = '';
+        const reContent = document.getElementById("recommend");
+        reContent.style.display = '';
+    
+        //추천 질문 리스트
+        if(result.length > 0){
+          reContent.innerHTML = "";
+          let printCnt = 0;
+          for(let cvo of result){
+            if(cvo.com_category == navVal){
+              let div = `<div class="recommend_post">`;
+              if(cvo.com_category === '개발'){
+                div += `<div style="color: #9B6DC8;">${cvo.com_category}</div>`;
+              }else{
+                div += `<div style="color: #CB68C3;">${cvo.com_category}</div>`; 
+              }
+              div += `<p><a href="/community/detail?com_num=${cvo.com_num}">${cvo.com_title}</a></p>`;
+              div += `<div><div>`;
+              div += `<span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
+                          <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+                          </svg>
+                          ${cvo.com_comment_cnt} |
+                      </span>`;
+              div += `<span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="10" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                              <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                          </svg> ${cvo.com_like_cnt}
+                      </span></div>`;
+              div += `<div>
+                        <span>조회</span> 
+                        <span>${cvo.com_cnt}</span>
+                      </div>`;
+              div += `</div></div>`;
+              reContent.innerHTML += div;
+      
+              printCnt++;
+              if(printCnt >= 6) break; 
+            }
+          }
+        }else{
+          let div = `<div>Content Empty</div>`;
+          reContent.innerHTML = div;
+          console.log("추천 질문 데이터가 없습니다.");
+        }
+      });
+      break;
+    case "MY":
+      console.log("MY");
+      const recommend_coment = document.getElementById("recommend_coment");
+      recommend_coment.style.display = 'none';
+      const reContent = document.getElementById("recommend");
+      reContent.style.display = 'none';
+      break;
+    default:
+      console.log("navVal error");
+      break;
+  }
+
+
+  
+}
+
+
+//-------------------------------------------------------------------------------------------
+
+// -- 최신순, 인기순 --
+
+// 최신순,인기순 버튼 클릭 이벤트 리스너
+function buttonClick(e) {
+  
+  const latestButton = document.getElementById("latestButton");
+  const popularButton = document.getElementById("popularButton");
+
+  if (e.target === latestButton) {
+    console.log('최신순 버튼 클릭됨');
+    localStorage.setItem('sortVal',"latest");
+
+    getCommunityList(0, kind);
+    updateSortBtnStyle()
+    
+  } else if (e.target === popularButton) {
+    console.log('인기순 버튼 클릭됨');
+    localStorage.setItem('sortVal', "popular") ;
+
+    getCommunityList(1, kind);
+    updateSortBtnStyle()
+
+  }
+}
+
+//클릭한 버튼을 하얀색,두껍게 (반대는 되돌리기)
+function updateSortBtnStyle() {
+
+  const latestButton = document.getElementById("latestButton");
+  const popularButton = document.getElementById("popularButton");
+
+  if (localStorage.getItem('sortVal') === "latest") {
+    latestButton.classList.add('selected_btn');
+    popularButton.classList.remove('selected_btn');
+
+  } else if (localStorage.getItem('sortVal')  === "popular") {
+    popularButton.classList.add('selected_btn');
+    latestButton.classList.remove('selected_btn');
+  }
+
+}
+
+
+//DB에서 정보 list로 가져오기(communityList)
+async function spreadCommunityListFromServer(sort_type){
+  try {
+      const resp =  await fetch('/community/communityList/' + sort_type);
+      const result = await resp.json();
+      return result;
+  } catch (error) {
+      console.log("community.js에서 전송 오류" + error)
+  }
+}
+
+
+//가져온 정보list 화면에 뿌리기
+function getCommunityList(sort_type, kind_type){
+  console.log(">>> sort_type : " + sort_type);
+  console.log(">>> kind_type : " + kind_type);
+
+    switch (kind_type) {
+      case "전체":   
+
+        spreadCommunityListFromServer(sort_type).then(result => {
+
+          console.log("Controller(DB) -> JS / likeList : " + (( result.likeList.length > 0 )? "OK":"FAIL"));
+          console.log("Controller(DB) -> JS / communityList : " + (( result.communityList.length > 0 )? "OK":"FAIL"));
+          console.log("Controller(DB) -> JS / thumbList : " + (( result.thumbList.length > 0 )? "OK":"FAIL"));
+
+          const content = document.getElementById("board");
+          const sort = document.getElementById("sort");
+          
+          if (result.communityList.length > 0) {
+            content.innerHTML = "";
+            sort.innerHTML  = `<button id="latestButton"> 최신순 </button><button id="popularButton"> 인기순 </button>`;
+            sort.addEventListener('click', buttonClick); //비동기로 뿌린뒤 최신순/인기순 이벤트리스너 추가
+            updateSortBtnStyle(); //클릭버튼 색상변경
+
+            for(let cvo of result.communityList){
+              let div = `<div>`;
+              div += `<div class="content_left">`;
+              div += `<div class="title"><a href="/community/detail?com_num=${cvo.com_num}">${cvo.com_title}</a></div>`;
+              div += `<div class="reaction">`;
+              let date = new Date(cvo.com_reg_date);
+              let year = date.getFullYear();
+              let month = (date.getMonth() + 1).toString().padStart(2, '0');
+              let day = date.getDate().toString().padStart(2, '0');
+              div += `<div>${year}-${month}-${day} </div>`;
+              div += `<div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
+                          <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+                        </svg> ${cvo.com_comment_cnt} |
+                      </div>`;     
+              div += `<div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="10" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                        </svg> ${cvo.com_like_cnt}
+                      </div>`;
+              div += `</div>`;
+              div += `<div class="content">${cvo.com_content}</div>`;
+              div += `</div>`;
+              let isThumb = true;
+              for(let t of result.thumbList){
+                if(cvo.com_num == t.com_num){
+                  div += `<div class="content_right">
+                            <img alt="이미지 없음" src="/upload/${t.com_file_save_dir.replace(/\\/g,'/')}/${t.com_file_uuid}_${t.com_file_name}">
+                          </div>`;
+                  isThumb = false;
+                  console.log("이미지 경로 : "+`/upload/${t.com_file_save_dir.replace(/\\/g,'/')}/${t.com_file_uuid}_${t.com_file_name}`);
+                }
+              }
+              if(isThumb){
+                div += `<div class="content_right">
+                          <img src="/resources/img/it.jpg" alt="이미지 기본사진">
+                        </div>`;
+              }
+              div += `<div class="content_bottom">`;
+              div += `<span>${cvo.nickname}</span>`;
+      
+              let isCom_num = true;
+              for(let i of result.likeList){
+                if(cvo.com_num === i){
+                  console.log(">>> i : " + i);
+                  console.log(">>> cvo.com_num : " + cvo.com_num);
+                  //색칠된 하트
+                  div += `<button class="like_button" value="${cvo.com_num}" id="true">`;
+                  div += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                          </svg>`;
+                  div += `</button></div>`; 
+                  isCom_num = false;
+                  break;
+                } 
+              }
+              if(isCom_num){
+                //빈 하트
+                div += `<button class="like_button" value="${cvo.com_num}" id="false">`;
+                div += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16">
+                          <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+                        </svg>`;
+                div += `</button></div>`;
+              }
+            
+              div += `<div class="main_line"></div></div>`;
+              content.innerHTML += div;
+            }
+          
+          }else{
+            content.innerHTML = `<div>Content Empty</div>`;
+            console.log("게시글 데이터가 없습니다.");
+          }
+      });
+        break;
+      case "개발": case "상담":
+
+        spreadCommunityListFromServer(sort_type).then(result => {
+
+          console.log("Controller(DB) -> JS / likeList : " + (( result.likeList.length > 0 )? "OK":"FAIL"));
+          console.log("Controller(DB) -> JS / communityList : " + (( result.communityList.length > 0 )? "OK":"FAIL"));
+          const content = document.getElementById("board"); 
+          const sort = document.getElementById("sort");
+          sort.addEventListener('click', buttonClick); //비동기로 뿌린뒤 최신순/인기순 이벤트리스너 추가
+
+          if (result.communityList.length > 0) {
+            content.innerHTML = "";
+            sort.innerHTML  = `<button id="latestButton"> 최신순 </button><button id="popularButton"> 인기순 </button>`;
+            sort.addEventListener('click', buttonClick); //비동기로 뿌린뒤 최신순/인기순 이벤트리스너 추가
+            updateSortBtnStyle(); //클릭버튼 색상변경
+
+
+            for(let cvo of result.communityList){
+              if(cvo.com_category == kind_type){
+                let div = `<div>`;
+                div += `<div class="content_left">`;
+                div += `<div class="title"><a href="/community/detail?com_num=${cvo.com_num}">${cvo.com_title}</a></div>`;
+                div += `<div class="reaction">`;
+                let date = new Date(cvo.com_reg_date);
+                let year = date.getFullYear();
+                let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                let day = date.getDate().toString().padStart(2, '0');
+                div += `<div>${year}-${month}-${day} </div>`;
+                div += `<div>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
+                            <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+                          </svg> ${cvo.com_comment_cnt} |
+                        </div>`;     
+                div += `<div>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="10" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                              <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                          </svg> ${cvo.com_like_cnt}
+                        </div>`;
+                div += `</div>`;
+                div += `<div class="content">${cvo.com_content}</div>`;
+                div += `</div>`;
+                let isThumb = true;
+                for(let t of result.thumbList){
+                  if(cvo.com_num === t.com_num){
+                    div += `<div class="content_right">
+                              <img alt="이미지 없음" src="/upload/${t.com_file_save_dir.replace(/\\/g,'/')}/${t.com_file_uuid}_${t.com_file_name}">
+                            </div>`;
+                    isThumb = false;
+                    console.log("이미지 경로 : "+`/upload/${t.com_file_save_dir.replace(/\\/g,'/')}/${t.com_file_uuid}_${t.com_file_name}`);
+                  }
+                }
+                if(isThumb){
+                  div += `<div class="content_right">
+                            <img src="/resources/img/it.jpg" alt="이미지 기본사진">
+                          </div>`;
+                }
+                div += `<div class="content_bottom">`;
+                div += `<span>${cvo.nickname}</span>`;
+        
+                let isCom_num = true;
+                for(let i of result.likeList){
+                  if(cvo.com_num === i){
+                    console.log(">>> i : " + i);
+                    console.log(">>> cvo.com_num : " + cvo.com_num);
+                    //색칠된 하트
+                    div += `<button class="like_button" value="${cvo.com_num}" id="true">`;
+                    div += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                              <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                            </svg>`;
+                    div += `</button></div>`; 
+                    isCom_num = false;
+                    break;
+                  } 
+                }
+              if(isCom_num){
+                //빈 하트
+                div += `<button class="like_button" value="${cvo.com_num}" id="false">`;
+                div += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16">
+                          <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+                        </svg>`;
+                div += `</button></div>`;
+              }
+            
+              div += `<div class="main_line"></div></div>`;
+              content.innerHTML += div;
+              }
+            }
+          }else{
+            content.innerHTML = `<div>Content Empty</div>`;
+            console.log("게시글 데이터가 없습니다.");
+          }
+      });
+        break;
+      case "MY":
+
+        spreadCommunityListFromServer(sort_type).then(result => {
+
+          console.log("Controller(DB) -> JS / likeList : " + (( result.likeList.length > 0 )? "OK":"FAIL"));
+          console.log("Controller(DB) -> JS / communityList : " + (( result.communityList.length > 0 )? "OK":"FAIL"));
+          const content = document.getElementById("board");  
+          const sort = document.getElementById("sort");
+          sort.addEventListener('click', buttonClick); //비동기로 뿌린뒤 최신순/인기순 이벤트리스너 추가
+            
+          if (result.communityList.length > 0) {
+            content.innerHTML = "";
+            sort.innerHTML  = `<button id="latestButton"> 최신순 </button><button id="popularButton"> 인기순 </button>`;
+            sort.addEventListener('click', buttonClick); //비동기로 뿌린뒤 최신순/인기순 이벤트리스너 추가
+            updateSortBtnStyle(); //클릭버튼 색상변경
+
+            for(let cvo of result.communityList){
+              if(cvo.id == sesId){
+                let div = `<div>`;
+                div += `<div class="content_left">`;
+                div += `<div class="title"><a href="/community/detail?com_num=${cvo.com_num}">${cvo.com_title}</a></div>`;
+                div += `<div class="reaction">`;
+                let date = new Date(cvo.com_reg_date);
+                let year = date.getFullYear();
+                let month = (date.getMonth() + 1).toString().padStart(2, '0');
+                let day = date.getDate().toString().padStart(2, '0');
+                div += `<div>${year}-${month}-${day} </div>`;
+                div += `<div>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
+                            <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+                          </svg> ${cvo.com_comment_cnt} |
+                        </div>`;     
+                div += `<div>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="10" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                              <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                          </svg> ${cvo.com_like_cnt}
+                        </div>`;
+                div += `</div>`;
+                div += `<div class="content">${cvo.com_content}</div>`;
+                div += `</div>`;
+                let isThumb = true;
+                for(let t of result.thumbList){
+                  if(cvo.com_num === t.com_num){
+                    div += `<div class="content_right">
+                              <img alt="이미지 없음" src="/upload/${t.com_file_save_dir.replace(/\\/g,'/')}/${t.com_file_uuid}_${t.com_file_name}">
+                            </div>`;
+                    isThumb = false;
+                    console.log("이미지 경로 : "+`/upload/${t.com_file_save_dir.replace(/\\/g,'/')}/${t.com_file_uuid}_${t.com_file_name}`);
+                  }
+                }
+                if(isThumb){
+                  div += `<div class="content_right">
+                            <img src="/resources/img/it.jpg" alt="이미지 기본사진">
+                          </div>`;
+                }
+                div += `<div class="content_bottom">`;
+                div += `<span>${cvo.nickname}</span>`;
+        
+                let isCom_num = true;
+                for(let i of result.likeList){
+                  if(cvo.com_num === i){
+                    console.log(">>> i : " + i);
+                    console.log(">>> cvo.com_num : " + cvo.com_num);
+                    //색칠된 하트
+                    div += `<button class="like_button" value="${cvo.com_num}" id="true">`;
+                    div += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                              <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                            </svg>`;
+                    div += `</button></div>`; 
+                    isCom_num = false;
+                    break;
+                  } 
+                }
+                if(isCom_num){
+                  //빈 하트
+                  div += `<button class="like_button" value="${cvo.com_num}" id="false">`;
+                  div += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16">
+                            <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+                          </svg>`;
+                  div += `</button></div>`;
+                }
+              
+                div += `<div class="main_line"></div></div>`;
+                content.innerHTML += div;
+              }
+            }
+          
+          }else{
+            content.innerHTML = `<div>Content Empty</div>`;
+            console.log("게시글 데이터가 없습니다.");
+          }
+      });
+        break
+      default:
+        console.log("navVal error");
+        break;
+    }
+
+}
+
+//----------------------------------------------------------------------------------------
+// -- 검색 --
+
+async function spreadsearchListFromServer(searchKeyword){
+  try {
+      const resp =  await fetch('/community/communitySearchList/' + searchKeyword);
+      const result = await resp.json();
+      return result;
+  } catch (error) {
+      console.log("community.js에서 전송 오류" + error)
+  }
+}
+
+
+document.getElementById('search').addEventListener('keypress',  (e)=>{
+  console.log(e.key);
+
+  if (e.key === 'Enter') { //검색어를 쓰고 엔터를 누르는 경우 실행
+        
+    const searchKeyword =  document.getElementById('search').value;
+    console.log(">>>searchKeyword : "+ searchKeyword);
+
+    spreadsearchListFromServer(searchKeyword).then(result => {
+      console.log("Controller(DB) -> JS / likeList : " + (( result.likeList.length > 0 )? "OK":"FAIL"));
+      console.log("Controller(DB) -> JS / communityList : " + (( result.communityList.length > 0 )? "OK":"FAIL"));
+      console.log("Controller(DB) -> JS / thumbList : " + (( result.thumbList.length > 0 )? "OK":"FAIL"));
+
+      const content = document.getElementById("board"); 
+      const searchType = document.getElementById("sort");
+        
+      const recommend_coment = document.getElementById("recommend_coment");
+      recommend_coment.style.display = 'none';
+      const reContent = document.getElementById("recommend");
+      reContent.style.display = 'none';
+
+      if (result.communityList.length > 0) {
+        content.innerHTML = "";
+        searchType.innerHTML  = `<h2>" ${searchKeyword} "</h2>`;
+
+        for(let cvo of result.communityList){
+              let div = `<div>`;
+              div += `<div class="content_left">`;
+              div += `<div class="title"><a href="/community/detail?com_num=${cvo.com_num}">${cvo.com_title}</a></div>`;
+              div += `<div class="reaction">`;
+              let date = new Date(cvo.com_reg_date);
+              let year = date.getFullYear();
+              let month = (date.getMonth() + 1).toString().padStart(2, '0');
+              let day = date.getDate().toString().padStart(2, '0');
+              div += `<div>${year}-${month}-${day} </div>`;
+              div += `<div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
+                          <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"/>
+                        </svg> ${cvo.com_comment_cnt} |
+                      </div>`;     
+              div += `<div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="10" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                        </svg> ${cvo.com_like_cnt}
+                      </div>`;
+              div += `</div>`;
+              div += `<div class="content">${cvo.com_content}</div>`;
+              div += `</div>`;
+              let isThumb = true;
+              for(let t of result.thumbList){
+                if(cvo.com_num === t.com_num){
+                  div += `<div class="content_right">
+                            <img alt="이미지 없음" src="/upload/${t.com_file_save_dir.replace(/\\/g,'/')}/${t.com_file_uuid}_${t.com_file_name}">
+                          </div>`;
+                  isThumb = false;
+                  console.log("이미지 경로 : "+`/upload/${t.com_file_save_dir.replace(/\\/g,'/')}/${t.com_file_uuid}_${t.com_file_name}`);
+                }
+              }
+              if(isThumb){
+                div += `<div class="content_right">
+                          <img src="/resources/img/it.jpg" alt="이미지 기본사진">
+                        </div>`;
+              }
+              div += `<div class="content_bottom">`;
+              div += `<span>${cvo.nickname}</span>`;
+      
+              let isCom_num = true;
+              for(let i of result.likeList){
+                if(cvo.com_num === i){
+                  console.log(">>> i : " + i);
+                  console.log(">>> cvo.com_num : " + cvo.com_num);
+                  //색칠된 하트
+                  div += `<button class="like_button" value="${cvo.com_num}" id="true">`;
+                  div += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart-fill" viewBox="0 0 16 16">
+                            <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1z"/>
+                          </svg>`;
+                  div += `</button></div>`; 
+                  isCom_num = false;
+                  break;
+                } 
+              }
+              if(isCom_num){
+                //빈 하트
+                div += `<button class="like_button" value="${cvo.com_num}" id="false">`;
+                div += `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-suit-heart" viewBox="0 0 16 16">
+                          <path d="m8 6.236-.894-1.789c-.222-.443-.607-1.08-1.152-1.595C5.418 2.345 4.776 2 4 2 2.324 2 1 3.326 1 4.92c0 1.211.554 2.066 1.868 3.37.337.334.721.695 1.146 1.093C5.122 10.423 6.5 11.717 8 13.447c1.5-1.73 2.878-3.024 3.986-4.064.425-.398.81-.76 1.146-1.093C14.446 6.986 15 6.131 15 4.92 15 3.326 13.676 2 12 2c-.777 0-1.418.345-1.954.852-.545.515-.93 1.152-1.152 1.595L8 6.236zm.392 8.292a.513.513 0 0 1-.784 0c-1.601-1.902-3.05-3.262-4.243-4.381C1.3 8.208 0 6.989 0 4.92 0 2.755 1.79 1 4 1c1.6 0 2.719 1.05 3.404 2.008.26.365.458.716.596.992a7.55 7.55 0 0 1 .596-.992C9.281 2.049 10.4 1 12 1c2.21 0 4 1.755 4 3.92 0 2.069-1.3 3.288-3.365 5.227-1.193 1.12-2.642 2.48-4.243 4.38z"/>
+                        </svg>`;
+                div += `</button></div>`;
+              }
+            
+              div += `<div class="main_line"></div></div>`;
+              content.innerHTML += div;
+                  
+          }
+      } else {
+        searchType.innerHTML  = `<h2>" ${searchKeyword} " </h2>`;
+        content.innerHTML = `<div>" ${searchKeyword} " 에 해당하는 게시글이 없습니다</div>`;
+      }  
+
+    })
+    
+  }
+})
+
+

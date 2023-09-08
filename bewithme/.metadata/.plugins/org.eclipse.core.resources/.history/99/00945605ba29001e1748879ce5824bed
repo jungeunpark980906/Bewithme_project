@@ -1,0 +1,33 @@
+package com.bewithme.www.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+<<<<<<<< HEAD:.metadata/.plugins/org.eclipse.core.resources/.history/b/807de3dca92a001e1f29db995b8afb7d
+@Getter
+@Setter
+public class Cou_CommentVO {
+	
+	private int cou_com_num;
+	private String cou_com_content;
+	private String cou_com_reg_date;
+	private String cou_com_mod_date;
+	private String id;
+	private int cou_num;
+========
+public class CalendarVO {
+	private int cal_num;
+	private String id;
+	private String date;
+	private String cal_content;
+	private String url;
+>>>>>>>> 26853861466dbeebda7f78731516de9907816124:.metadata/.plugins/org.eclipse.core.resources/.history/99/00945605ba29001e1748879ce5824bed
+}

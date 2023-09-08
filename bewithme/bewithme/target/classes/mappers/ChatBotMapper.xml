@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    <mapper namespace="com.bewithme.www.repository.ChatBotDAO">
+    
+    	<insert id="insertChatBot">
+    		insert into chat_bot(id,title_content,btn_content,bot_content)
+    		values(#{id},#{title_content},#{btn_content},#{bot_content})
+    	</insert>
+    	
+    	<select id="getList" resultType="com.bewithme.www.domain.ChatBotVO">
+    		select * from chat_bot
+    	</select>
+    
+    
+    </mapper>
